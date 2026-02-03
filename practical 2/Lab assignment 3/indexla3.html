@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>MobileNet vs ResNet Comparison</title>
+
+    <!-- TensorFlow.js -->
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest"></script>
+
+    <!-- MobileNet -->
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/mobilenet"></script>
+
+    <!-- ResNet -->
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/resnet"></script>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #eef2f7;
+            text-align: center;
+            padding: 20px;
+        }
+
+        img {
+            width: 250px;
+            border: 2px solid #333;
+            margin: 15px 0;
+        }
+
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            margin-bottom: 20px;
+        }
+
+        .results {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+        }
+
+        .card {
+            background: white;
+            padding: 15px;
+            width: 350px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+        }
+
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        li {
+            padding: 6px;
+            border-bottom: 1px solid #ddd;
+        }
+    </style>
+</head>
+<body>
+
+<h2>MobileNet vs ResNet Image Classification</h2>
+<p>Comparing top-3 predictions</p>
+
+<img id="image"
+     src="https://upload.wikimedia.org/wikipedia/commons/4/4c/Push_van_cat.jpg"
+     crossorigin="anonymous"
+     alt="Test Image">
+
+<br>
+
+<button onclick="compareModels()">Compare Models</button>
+
+<div class="results">
+    <div class="card">
+        <h3>MobileNet</h3>
+        <ul id="mobilenetResults"></ul>
+    </div>
+
+    <div class="card">
+        <h3>ResNet</h3>
+        <ul id="resnetResults"></ul>
+    </div>
+</div>
+
+<script>
+async function compareModels() {
+
+    const img = document.getElementById("image");
+
+    const mobileList = document.getElementById("mobilenetResults");
+    const resnetList = document.getElementById("resnetResults");
+
+    mobileList.innerHTML = "<li>Loading MobileNet...</li>";
+    resnetList.innerHTML = "<li>Loading ResNet...</li>";
+
+    // Load models
+    const mobileNetModel = await mobilenet.load();
+    const resNetModel = await resnet.load();
+
+    // Classify image
+    const mobilePreds = await mobileNetModel.classify(img);
+    const resNetPreds = await resNetModel.classify(img);
+
+    // Display MobileNet results
+    mobileList.innerHTML = "";
+    mobilePreds.slice(0, 3).forEach((pred, i) => {
+        const li = document.createElement("li");
+        li.textContent =
+            `${i + 1}. ${pred.className} — ${(pred.probability * 100).toFixed(2)}%`;
+        mobileList.appendChild(li);
+    });
+
+    // Display ResNet results
+    resnetList.innerHTML = "";
+    resNetPreds.slice(0, 3).forEach((pred, i) => {
+        const li = document.createElement("li");
+        li.textContent =
+            `${i + 1}. ${pred.className} — ${(pred.probability * 100).toFixed(2)}%`;
+        resnetList.appendChild(li);
+    });
+}
+</script>
+
+</body>
+</html>
