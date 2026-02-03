@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Regression Model - TensorFlow.js</title>
+
+    <!-- TensorFlow.js -->
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest"></script>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #eef2f7;
+            text-align: center;
+            padding: 20px;
+        }
+
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            margin: 15px;
+        }
+
+        canvas {
+            border: 1px solid #333;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+<h2>Regression Model using TensorFlow.js</h2>
+<p>Predicted vs Actual Values</p>
+
+<button onclick="trainAndPlot()">Train & Plot</button>
+
+<br>
+
+<canvas id="plot" width="500" height="500"></canvas>
+
+<script>
+async function trainAndPlot() {
+
+    // 🔹 Generate synthetic data (y = 3x + 2 + noise)
+    const xValues = [];
+    const yValues = [];
+
+    for (let i = 0; i < 50; i++) {
+        xValues.push(i);
+        yValues.push(3 * i + 2 + (Math.random() * 10 - 5));
+    }
+
+    const xs = tf.tensor1d(xValues);
+    const ys = tf.tensor1d(yValues);
+
+    // 🔹 Build regression model
+    const model = tf.sequential();
+    model.add(tf.layers.dense({ units: 1, inputShape: [1] }));
+
+    model.compile({
+        optimizer: tf.train.sgd(0.001),
+        loss: 'meanSquaredError'
+    });
+
+    // 🔹 Train model
+    await model.fit(xs, ys, {
+        epochs: 200,
+        verbose: 0
+    });
+
+    // 🔹 Predict values
+    const predictions = model.predict(xs);
+
+    // 🔹 Convert tensors to arrays
+    const xData = xValues;
+    const yActual = yValues;
+    const yPredicted = predictions.arraySync();
+
+    // 🔹 Plot results
+    drawGraph(xData, yActual, yPredicted);
+}
+
+function drawGraph(x, actual, predicted) {
+    const canvas = document.getElementById("plot");
+    const ctx = canvas.getContext("2d");
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    const padding = 40;
+    const maxX = Math.max(...x);
+    const maxY = Math.max(...actual, ...predicted);
+
+    function scaleX(val) {
+        return padding + (val / maxX) * (canvas.width - 2 * padding);
+    }
+
+    function scaleY(val) {
+        return canvas.height - padding - (val / maxY) * (canvas.height - 2 * padding);
+    }
+
+    // Draw axes
+    ctx.beginPath();
+    ctx.moveTo(padding, padding);
+    ctx.lineTo(padding, canvas.height - padding);
+    ctx.lineTo(canvas.width - padding, canvas.height - padding);
+    ctx.stroke();
+
+    // Plot actual values (blue dots)
+    ctx.fillStyle = "blue";
+    for (let i = 0; i < x.length; i++) {
+        ctx.beginPath();
+        ctx.arc(scaleX(x[i]), scaleY(actual[i]), 3, 0, 2 * Math.PI);
+        ctx.fill();
+    }
+
+    // Plot predicted values (red dots)
+    ctx.fillStyle = "red";
+    for (let i = 0; i < x.length; i++) {
+        ctx.beginPath();
+        ctx.arc(scaleX(x[i]), scaleY(predicted[i]), 3, 0, 2 * Math.PI);
+        ctx.fill();
+    }
+
+    // Legend
+    ctx.fillStyle = "blue";
+    ctx.fillText("Actual Values", 50, 20);
+    ctx.fillStyle = "red";
+    ctx.fillText("Predicted Values", 170, 20);
+}
+</script>
+
+</body>
+</html>
