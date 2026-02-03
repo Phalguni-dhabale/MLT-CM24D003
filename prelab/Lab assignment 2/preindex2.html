@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Learning Rate Experiment - TensorFlow.js</title>
+
+    <!-- TensorFlow.js -->
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest"></script>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #eef2f7;
+            text-align: center;
+            padding: 20px;
+        }
+
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            margin-bottom: 15px;
+        }
+
+        canvas {
+            border: 1px solid #333;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+<h2>Effect of Learning Rate on Convergence</h2>
+<p>Loss vs Epochs for Different Learning Rates</p>
+
+<button onclick="runExperiment()">Run Experiment</button>
+
+<br>
+
+<canvas id="plot" width="600" height="400"></canvas>
+
+<script>
+async function runExperiment() {
+
+    // Synthetic data: y = 2x + 1 + noise
+    const xData = [];
+    const yData = [];
+
+    for (let i = 0; i < 50; i++) {
+        xData.push(i);
+        yData.push(2 * i + 1 + (Math.random() * 10 - 5));
+    }
+
+    const xs = tf.tensor2d(xData, [xData.length, 1]);
+    const ys = tf.tensor2d(yData, [yData.length, 1]);
+
+    const learningRates = [
+        { lr: 0.0001, color: "blue", label: "LR = 0.0001 (Slow)" },
+        { lr: 0.01, color: "green", label: "LR = 0.01 (Good)" },
+        { lr: 0.1, color: "red", label: "LR = 0.1 (Unstable)" }
+    ];
+
+    const lossHistory = [];
+
+    for (const config of learningRates) {
+        const model = tf.sequential();
+        model.add(tf.layers.dense({ units: 1, inputShape: [1] }));
+
+        model.compile({
+            optimizer: tf.train.sgd(config.lr),
+            loss: "meanSquaredError"
+        });
+
+        const losses = [];
+
+        await model.fit(xs, ys, {
+            epochs: 50,
+            verbose: 0,
+            callbacks: {
+                onEpochEnd: (epoch, logs) => {
+                    losses.push(logs.loss);
+                }
+            }
+        });
+
+        lossHistory.push({
+            losses,
+            color: config.color,
+            label: config.label
+        });
+    }
+
+    drawLossGraph(lossHistory);
+}
+
+function drawLossGraph(histories) {
+    const canvas = document.getElementById("plot");
+    const ctx = canvas.getContext("2d");
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    const padding = 40;
+    const maxEpochs = histories[0].losses.length;
+    const maxLoss = Math.max(...histories.flatMap(h => h.losses));
+
+    function scaleX(epoch) {
+        return padding + (epoch / (maxEpochs - 1)) * (canvas.width - 2 * padding);
+    }
+
+    function scaleY(loss) {
+        return canvas.height - padding - (loss / maxLoss) * (canvas.height - 2 * padding);
+    }
+
+    // Axes
+    ctx.beginPath();
+    ctx.moveTo(padding, padding);
+    ctx.lineTo(padding, canvas.height - padding);
+    ctx.lineTo(canvas.width - padding, canvas.height - padding);
+    ctx.stroke();
+
+    // Plot curves
+    histories.forEach(history => {
+        ctx.beginPath();
+        ctx.strokeStyle = history.color;
+        history.losses.forEach((loss, epoch) => {
+            const x = scaleX(epoch);
+            const y = scaleY(loss);
+            if (epoch === 0) ctx.moveTo(x, y);
+            else ctx.lineTo(x, y);
+        });
+        ctx.stroke();
+    });
+
+    // Legend
+    let yPos = 20;
+    histories.forEach(h => {
+        ctx.fillStyle = h.color;
+        ctx.fillText(h.label, 50, yPos);
+        yPos += 15;
+    });
+}
+</script>
+
+</body>
+</html>
