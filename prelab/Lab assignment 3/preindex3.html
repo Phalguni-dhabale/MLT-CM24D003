@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Prediction on Unseen Data - TensorFlow.js</title>
+
+    <!-- TensorFlow.js -->
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest"></script>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #eef2f7;
+            text-align: center;
+            padding: 20px;
+        }
+
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            margin: 15px;
+        }
+
+        table {
+            margin: auto;
+            border-collapse: collapse;
+            width: 70%;
+            max-width: 600px;
+        }
+
+        th, td {
+            border: 1px solid #999;
+            padding: 10px;
+        }
+
+        th {
+            background: #ddd;
+        }
+    </style>
+</head>
+<body>
+
+<h2>Prediction on Unseen Inputs</h2>
+<p>Regression Model using TensorFlow.js</p>
+
+<button onclick="trainAndPredict()">Train Model & Predict</button>
+
+<table id="resultTable">
+    <tr>
+        <th>Input (x)</th>
+        <th>Expected Output (y)</th>
+        <th>Predicted Output (ŷ)</th>
+    </tr>
+</table>
+
+<script>
+async function trainAndPredict() {
+
+    // 🔹 Training data (y = 2x + 1)
+    const xTrain = [];
+    const yTrain = [];
+
+    for (let i = 0; i < 40; i++) {
+        xTrain.push(i);
+        yTrain.push(2 * i + 1);
+    }
+
+    const xs = tf.tensor2d(xTrain, [xTrain.length, 1]);
+    const ys = tf.tensor2d(yTrain, [yTrain.length, 1]);
+
+    // 🔹 Build model
+    const model = tf.sequential();
+    model.add(tf.layers.dense({ units: 1, inputShape: [1] }));
+
+    model.compile({
+        optimizer: tf.train.sgd(0.01),
+        loss: "meanSquaredError"
+    });
+
+    // 🔹 Train model
+    await model.fit(xs, ys, {
+        epochs: 100,
+        verbose: 0
+    });
+
+    // 🔹 Unseen test inputs
+    const testInputs = [45, 50, 55, 60, 65];
+    const expectedOutputs = testInputs.map(x => 2 * x + 1);
+
+    const testTensor = tf.tensor2d(testInputs, [testInputs.length, 1]);
+    const predictions = model.predict(testTensor).arraySync();
+
+    // 🔹 Display results
+    const table = document.getElementById("resultTable");
+    table.innerHTML = `
+        <tr>
+            <th>Input (x)</th>
+            <th>Expected Output (y)</th>
+            <th>Predicted Output (ŷ)</th>
+        </tr>
+    `;
+
+    for (let i = 0; i < testInputs.length; i++) {
+        const row = table.insertRow();
+        row.insertCell(0).textContent = testInputs[i];
+        row.insertCell(1).textContent = expectedOutputs[i];
+        row.insertCell(2).textContent = predictions[i][0].toFixed(2);
+    }
+}
+</script>
+
+</body>
+</html>
