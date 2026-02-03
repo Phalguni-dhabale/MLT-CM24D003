@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Vector Operations using TensorFlow.js</title>
+
+    <!-- TensorFlow.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest"></script>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f0f4f8;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            width: 420px;
+            text-align: center;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        pre {
+            background: #f7f7f7;
+            padding: 15px;
+            margin-top: 20px;
+            text-align: left;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>TensorFlow.js Vector Operations</h2>
+    <p>Element-wise Addition and Multiplication</p>
+
+    <button onclick="performOperations()">Perform Operations</button>
+
+    <pre id="output">Click the button to see results...</pre>
+</div>
+
+<script>
+    function performOperations() {
+        const output = document.getElementById("output");
+        output.textContent = "";
+
+        // Create two vectors
+        const vectorA = tf.tensor1d([1, 2, 3, 4]);
+        const vectorB = tf.tensor1d([5, 6, 7, 8]);
+
+        // Element-wise operations
+        const addition = tf.add(vectorA, vectorB);
+        const multiplication = tf.mul(vectorA, vectorB);
+
+        output.textContent += "Vector A:\n" + vectorA.toString() + "\n\n";
+        output.textContent += "Vector B:\n" + vectorB.toString() + "\n\n";
+        output.textContent += "Element-wise Addition (A + B):\n" + addition.toString() + "\n\n";
+        output.textContent += "Element-wise Multiplication (A × B):\n" + multiplication.toString();
+    }
+</script>
+
+</body>
+</html>
