@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Text Sentiment Analysis</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="container">
+        <h1>Text Sentiment Analysis</h1>
+        <p class="subtitle">
+            Classify text as <span>Positive</span> or <span>Negative</span>
+        </p>
+
+        <textarea id="textInput" placeholder="Type your text here..."></textarea>
+
+        <button onclick="analyzeSentiment()">Analyze Sentiment</button>
+
+        <div id="output" class="output-box">
+            <h2 id="sentimentText">Sentiment will appear here</h2>
+            <p id="scoreText"></p>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

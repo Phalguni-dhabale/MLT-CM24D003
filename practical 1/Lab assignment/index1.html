@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>TensorFlow.js Tensor Demo</title>
+
+    <!-- TensorFlow.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest"></script>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        pre {
+            background: #f4f4f4;
+            padding: 15px;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <h2>TensorFlow.js Tensor Demo</h2>
+    <p>Creating Scalar, Vector, and Matrix Tensors</p>
+
+    <button onclick="createTensors()">Create Tensors</button>
+
+    <pre id="output">Click the button to create tensors...</pre>
+
+    <script>
+        function createTensors() {
+            const output = document.getElementById("output");
+            output.textContent = "";
+
+            // Scalar Tensor (0D)
+            const scalar = tf.scalar(10);
+            output.textContent += "Scalar Tensor:\n";
+            output.textContent += scalar.toString() + "\n\n";
+
+            // Vector Tensor (1D)
+            const vector = tf.tensor1d([1, 2, 3, 4, 5]);
+            output.textContent += "Vector Tensor:\n";
+            output.textContent += vector.toString() + "\n\n";
+
+            // Matrix Tensor (2D)
+            const matrix = tf.tensor2d(
+                [1, 2, 3, 4, 5, 6],
+                [2, 3]
+            );
+            output.textContent += "Matrix Tensor:\n";
+            output.textContent += matrix.toString();
+        }
+    </script>
+
+</body>
+</html>
