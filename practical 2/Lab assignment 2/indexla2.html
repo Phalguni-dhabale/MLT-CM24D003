@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>MobileNet Accuracy Test</title>
+
+    <!-- TensorFlow.js -->
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest"></script>
+
+    <!-- MobileNet -->
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/mobilenet"></script>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #eef2f7;
+            padding: 20px;
+            text-align: center;
+        }
+
+        img {
+            width: 200px;
+            border: 2px solid #333;
+            margin: 10px;
+        }
+
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            margin: 15px;
+        }
+
+        table {
+            margin: auto;
+            border-collapse: collapse;
+            width: 90%;
+            max-width: 800px;
+        }
+
+        th, td {
+            border: 1px solid #999;
+            padding: 10px;
+        }
+
+        th {
+            background: #ddd;
+        }
+
+        .correct {
+            color: green;
+            font-weight: bold;
+        }
+
+        .incorrect {
+            color: red;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+<h2>MobileNet Image Classification Accuracy Test</h2>
+<p>Testing on 5 different images</p>
+
+<!-- Test Images -->
+<div>
+    <img src="https://upload.wikimedia.org/wikipedia/commons/4/4c/Push_van_cat.jpg" crossorigin="anonymous">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/7/7e/Bengal_tiger.jpg" crossorigin="anonymous">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/1/15/Red_Apple.jpg" crossorigin="anonymous">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/3/3a/Cat03.jpg" crossorigin="anonymous">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/0/0b/Golden_Retriever_Carlos_%2810581910556%29.jpg" crossorigin="anonymous">
+</div>
+
+<button onclick="testAccuracy()">Test Accuracy</button>
+
+<table id="resultTable">
+    <tr>
+        <th>Image</th>
+        <th>Expected Label</th>
+        <th>Predicted Label</th>
+        <th>Status</th>
+    </tr>
+</table>
+
+<h3 id="accuracy"></h3>
+
+<script>
+async function testAccuracy() {
+
+    const expectedLabels = [
+        "cat",
+        "tiger",
+        "apple",
+        "cat",
+        "dog"
+    ];
+
+    const images = document.querySelectorAll("img");
+    const table = document.getElementById("resultTable");
+    const accuracyText = document.getElementById("accuracy");
+
+    accuracyText.textContent = "Loading MobileNet model...";
+    const model = await mobilenet.load();
+
+    let correct = 0;
+
+    // Clear old rows
+    table.innerHTML = `
+        <tr>
+            <th>Image</th>
+            <th>Expected Label</th>
+            <th>Predicted Label</th>
+            <th>Status</th>
+        </tr>
+    `;
+
+    for (let i = 0; i < images.length; i++) {
+        const predictions = await model.classify(images[i]);
+        const predictedLabel = predictions[0].className.toLowerCase();
+
+        const isCorrect = predictedLabel.includes(expectedLabels[i]);
+
+        if (isCorrect) correct++;
+
+        const row = table.insertRow();
+        row.insertCell(0).textContent = `Image ${i + 1}`;
+        row.insertCell(1).textContent = expectedLabels[i];
+        row.insertCell(2).textContent = predictions[0].className;
+
+        const statusCell = row.insertCell(3);
+        statusCell.textContent = isCorrect ? "Correct" : "Incorrect";
+        statusCell.className = isCorrect ? "correct" : "incorrect";
+    }
+
+    const accuracy = (correct / images.length) * 100;
+    accuracyText.textContent = `Overall Accuracy: ${accuracy.toFixed(2)}%`;
+}
+</script>
+
+</body>
+</html>
