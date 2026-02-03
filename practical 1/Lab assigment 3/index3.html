@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Tensor Reshape vs Flatten - TensorFlow.js</title>
+
+    <!-- TensorFlow.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest"></script>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #eef2f7;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            width: 500px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            margin-bottom: 15px;
+        }
+
+        pre {
+            background: #f7f7f7;
+            padding: 15px;
+            border-radius: 5px;
+            white-space: pre-wrap;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>TensorFlow.js: Reshape vs Flatten</h2>
+    <p>Demonstrating tensor reshaping</p>
+
+    <button onclick="demoReshapeFlatten()">Run Demo</button>
+
+    <pre id="output">Click the button to see the result...</pre>
+</div>
+
+<script>
+    function demoReshapeFlatten() {
+        const output = document.getElementById("output");
+        output.textContent = "";
+
+        // Original tensor (2D matrix)
+        const originalTensor = tf.tensor2d(
+            [1, 2, 3, 4, 5, 6],
+            [2, 3]
+        );
+
+        // Reshape tensor (2x3 -> 3x2)
+        const reshapedTensor = originalTensor.reshape([3, 2]);
+
+        // Flatten tensor (convert to 1D)
+        const flattenedTensor = originalTensor.flatten();
+
+        output.textContent += "Original Tensor (Shape: 2 x 3):\n";
+        output.textContent += originalTensor.toString() + "\n\n";
+
+        output.textContent += "Reshaped Tensor (Shape: 3 x 2):\n";
+        output.textContent += reshapedTensor.toString() + "\n\n";
+
+        output.textContent += "Flattened Tensor (Shape: 1D):\n";
+        output.textContent += flattenedTensor.toString();
+    }
+</script>
+
+</body>
+</html>
