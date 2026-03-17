@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Webcam Object Detection</title>
+
+<link rel="stylesheet" href="style.css">
+
+<!-- TensorFlow JS -->
+<script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"></script>
+
+<!-- COCO SSD Model -->
+<script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/coco-ssd"></script>
+</head>
+
+<body>
+
+<h1>Webcam Based Object Detection</h1>
+
+<div class="container">
+    <video id="webcam" autoplay playsinline></video>
+    <canvas id="canvas"></canvas>
+</div>
+
+<button id="startBtn">Start Detection</button>
+
+<script src="script.js"></script>
+
+</body>
+</html>

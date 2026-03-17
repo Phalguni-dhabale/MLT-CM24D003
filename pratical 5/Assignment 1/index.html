@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+<meta charset="UTF-8">
+<title>Webcam Object Classification</title>
+
+<link rel="stylesheet" href="style.css">
+
+<!-- TensorFlow.js -->
+<script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"></script>
+
+<!-- MobileNet Model -->
+<script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/mobilenet"></script>
+
+</head>
+
+<body>
+
+<h1>Webcam Object Classification using MobileNet</h1>
+
+<video id="webcam" autoplay playsinline></video>
+
+<p id="result">Prediction: Waiting...</p>
+
+<button onclick="startCamera()">Start Camera</button>
+
+<script src="script.js"></script>
+
+</body>
+</html>

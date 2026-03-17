@@ -1,0 +1,35 @@
+body{
+    text-align:center;
+    font-family:Arial;
+    background:#f4f4f4;
+}
+
+h1{
+    color:#333;
+}
+
+video{
+    width:640px;
+    height:480px;
+    border:3px solid black;
+}
+
+#result{
+    font-size:20px;
+    margin-top:10px;
+    color:blue;
+}
+
+button{
+    margin-top:20px;
+    padding:10px 20px;
+    font-size:18px;
+    background:green;
+    color:white;
+    border:none;
+    cursor:pointer;
+}
+
+button:hover{
+    background:darkgreen;
+}

@@ -1,0 +1,41 @@
+body{
+    text-align:center;
+    font-family:Arial;
+    background:#f4f4f4;
+}
+
+h1{
+    color:#333;
+}
+
+.container{
+    position:relative;
+    width:640px;
+    margin:auto;
+}
+
+video{
+    width:640px;
+    height:480px;
+    border:3px solid black;
+}
+
+canvas{
+    position:absolute;
+    left:0;
+    top:0;
+}
+
+button{
+    margin-top:20px;
+    padding:10px 20px;
+    font-size:18px;
+    background:green;
+    color:white;
+    border:none;
+    cursor:pointer;
+}
+
+button:hover{
+    background:darkgreen;
+}

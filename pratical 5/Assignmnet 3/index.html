@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+<meta charset="UTF-8">
+<title>Webcam MobileNet FPS Analysis</title>
+
+<link rel="stylesheet" href="style.css">
+
+<!-- TensorFlow.js -->
+<script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"></script>
+
+<!-- MobileNet Model -->
+<script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/mobilenet"></script>
+
+</head>
+
+<body>
+
+<h1>Real-Time Inference Performance (FPS)</h1>
+
+<div class="container">
+
+<video id="webcam" autoplay playsinline></video>
+
+<div id="prediction">Prediction: Waiting...</div>
+
+<div id="fps">FPS: 0</div>
+
+</div>
+
+<button onclick="startCamera()">Start Camera</button>
+
+<script src="script.js"></script>
+
+</body>
+</html>

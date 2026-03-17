@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+<meta charset="UTF-8">
+<title>Overlay Classification on Webcam</title>
+
+<link rel="stylesheet" href="style.css">
+
+<!-- TensorFlow.js -->
+<script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"></script>
+
+<!-- MobileNet Model -->
+<script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/mobilenet"></script>
+
+</head>
+
+<body>
+
+<h1>Webcam Classification with Overlay Label</h1>
+
+<div class="video-container">
+
+    <video id="webcam" autoplay playsinline></video>
+
+    <div id="label">Prediction: Waiting...</div>
+
+</div>
+
+<button onclick="startCamera()">Start Camera</button>
+
+<script src="script.js"></script>
+
+</body>
+</html>
