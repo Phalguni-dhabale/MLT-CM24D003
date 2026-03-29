@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>TensorFlow.js Smart AI System</title>
+  <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/mobilenet"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/coco-ssd"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/posenet"></script>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<h1>🤖 Smart AI System (TensorFlow.js)</h1>
+
+<div class="menu">
+  <button onclick="show('regression')">Regression</button>
+  <button onclick="show('mnist')">Digit</button>
+  <button onclick="show('image')">Image</button>
+  <button onclick="show('object')">Object</button>
+  <button onclick="show('pose')">Pose</button>
+</div>
+
+<!-- Regression -->
+<div id="regression" class="section">
+  <h2>Linear Regression</h2>
+  <button onclick="runRegression()">Train Model</button>
+  <p id="regOutput"></p>
+</div>
+
+<!-- MNIST -->
+<div id="mnist" class="section">
+  <h2>Digit Recognition</h2>
+  <p>Demo only (Model training is heavy for browser)</p>
+</div>
+
+<!-- Image Classification -->
+<div id="image" class="section">
+  <h2>Image Classification (MobileNet)</h2>
+  <input type="file" id="imgUpload">
+  <img id="preview" width="200">
+  <button onclick="classifyImage()">Classify</button>
+  <p id="imgResult"></p>
+</div>
+
+<!-- Object Detection -->
+<div id="object" class="section">
+  <h2>Object Detection</h2>
+  <video id="video" autoplay></video>
+  <button onclick="startObject()">Start Detection</button>
+</div>
+
+<!-- Pose Detection -->
+<div id="pose" class="section">
+  <h2>Pose Detection</h2>
+  <video id="poseVideo" autoplay></video>
+  <button onclick="startPose()">Start Pose</button>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
